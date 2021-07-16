@@ -8,10 +8,11 @@
     'category': 'Productivity',
     'website': 'https://www.odoomates.tech',
     'license': 'LGPL-3',
-    'depends': [],
+    'depends': ['sale'],
     'data': [
         'security/ir.model.access.csv',
-        'views/patient.xml'
+        'views/patient.xml',
+        'views/sale.xml'
     ],
     'demo': [],
     'qweb': [],
