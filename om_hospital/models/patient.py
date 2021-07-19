@@ -17,7 +17,8 @@ class HospitalPatient(models.Model):
     note = fields.Text(string='Description', tracking=True)
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled')],
                              default="draft", string="Status")
-    responsible_id = fields.Many2one('res.partner', string="Responsible")  # if you put res.model in the first, you dont need to add comodel attribute to it
+    responsible_id = fields.Many2one(comodel='res.partner',
+                                     string="Responsible")  # if yoou put res.model in the first, you dont need to add comodel attribute to it
 
     def action_confirm(self):
         self.state = "confirm"
