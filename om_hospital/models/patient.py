@@ -31,3 +31,12 @@ class HospitalPatient(models.Model):
 
     def action_cancel(self):
         self.state = "cancel"
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('note'):
+            vals['note'] = 'New Patient'
+        res = super(HospitalPatient, self).create(vals)
+        # print("res---->", res)
+        # print("vals---->", vals)
+        return res
