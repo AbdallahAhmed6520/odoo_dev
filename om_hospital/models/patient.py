@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 
 
 class HospitalPatient(models.Model):
@@ -8,6 +8,8 @@ class HospitalPatient(models.Model):
     _description = "Hospital Patient"
 
     name = fields.Char(string='Name', required=True, tracking=True)
+    reference = fields.Char(string='Order Reference', required=True, copy=False, readonly=True,
+                            default=lambda self: _('New'))
     age = fields.Integer(string='Age', tracking=True)
     gender = fields.Selection([
         ('male', 'Male'),
@@ -36,6 +38,8 @@ class HospitalPatient(models.Model):
     def create(self, vals):
         if not vals.get('note'):
             vals['note'] = 'New Patient'
+        if vals.get('reference', _('New')) == _('New'):
+            vals['reference'] = self.env['ir.sequence'].next_by_code('hospital.patient') or _('New')
         res = super(HospitalPatient, self).create(vals)
         # print("res---->", res)
         # print("vals---->", vals)
