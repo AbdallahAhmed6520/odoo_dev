@@ -10,12 +10,12 @@ class HospitalPatient(models.Model):
     name = fields.Char(string='Order Reference', required=True, copy="False", readonly=True,
                        default=lambda self: _('New'))
     patient_id = fields.Many2one('hospital.patient', string="Patient", required=True)
+    age = fields.Integer(string='Age', related='patient_id.age', tracking=True)
     gender = fields.Selection([
         ('male', 'Male'),
         ('female', 'Female'),
         ('other', 'other'),
     ], string="Gender")
-    age = fields.Integer(string='Age', related='patient_id.age', tracking=True)
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled')],
                              default="draft", string="Status")
     note = fields.Text(string='Description')
@@ -38,8 +38,8 @@ class HospitalPatient(models.Model):
     def create(self, vals):
         if not vals.get('note'):
             vals['note'] = 'New Patient'
-        if vals.get('reference', _('New')) == _('New'):
-            vals['reference'] = self.env['ir.sequence'].next_by_code('hospital.patient') or _('New')
+        if vals.get('name', _('New')) == _('New'):
+            vals['name'] = self.env['ir.sequence'].next_by_code('hospital.patient') or _('New')
         res = super(HospitalPatient, self).create(vals)
         # print("res---->", res)
         # print("vals---->", vals)
