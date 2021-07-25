@@ -10,12 +10,18 @@ class HospitalPatient(models.Model):
     name = fields.Char(string='Order Reference', required=True, copy="False", readonly=True,
                        default=lambda self: _('New'))
     patient_id = fields.Many2one('hospital.patient', string="Patient", required=True)
-    age = fields.Integer(string='Age', related='patient_id.age' ,tracking=True)
+    gender = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'other'),
+    ], string="Gender")
+    age = fields.Integer(string='Age', related='patient_id.age', tracking=True)
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled')],
                              default="draft", string="Status")
     note = fields.Text(string='Description')
     date_appointment = fields.Date(string="Date")
     date_checkup = fields.Datetime(string="Check Up Time")
+
     def action_confirm(self):
         self.state = "confirm"
 
@@ -38,3 +44,11 @@ class HospitalPatient(models.Model):
         # print("res---->", res)
         # print("vals---->", vals)
         return res
+
+    @api.onchange('patient_id')
+    def onchange_patient_id(self):
+        if self.patient_id:
+            if self.patient_id.gender:
+                self.gender = self.patient_id.gender
+        else:
+            self.gender = ''
