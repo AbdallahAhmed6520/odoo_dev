@@ -21,6 +21,11 @@ class HospitalPatient(models.Model):
                              default="draft", string="Status")
     responsible_id = fields.Many2one('res.partner',
                                      string="Responsible")  # if yoou put res.model in the first, you dont need to add comodel attribute to it
+    appointment_count = fields.Integer(string='Appointment Count', compute='_compute_appointment_count')
+
+    def _compute_appointment_count(self):
+        appointment_count = self.env['hospital.appointment'].search_count([('patient_id', '=', self.id)])
+        self.appointment_count = appointment_count
 
     def action_confirm(self):
         self.state = "confirm"

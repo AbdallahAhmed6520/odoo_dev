@@ -46,6 +46,7 @@
                             <field name="responsible_id"/>
                             <!--                            m2o-->
                             <field name="age"/>
+                            <field name="appointment_count"/>
                         </group>
                         <group>
                             <field name="gender" invisible="context.get('hide_gender')"/>
@@ -101,7 +102,7 @@
         </field>
     </record>
 
-    <record id="view_patient_search" model="ir.ui.view">
+  <record id="view_patient_search" model="ir.ui.view">
         <field name="name">patients</field>
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
